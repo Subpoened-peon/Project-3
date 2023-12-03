@@ -4,13 +4,13 @@ import java.util.*;
 
 public class TMState extends State {
     
-    private Map<Character, TMState> myTransitions;
+    private Map<String, TMState> myTransitions;
     private boolean isHalt;
 
     public TMState(String name, int numberOfStates) {
 
         super(name);
-        this.myTransitions = new HashMap<Character, TMState>();
+        this.myTransitions = new HashMap<String, TMState>();
         if(Integer.parseInt(name) != (numberOfStates - 1)) {
             this.isHalt = false;
         } else {
@@ -22,7 +22,7 @@ public class TMState extends State {
         return isHalt;
     }
 
-    public void addTransitions(char symbol, TMState state) {
+    public void addTransitions(String symbol, TMState state) {
         myTransitions.put(symbol, state);
     }
 
