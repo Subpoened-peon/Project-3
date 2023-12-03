@@ -36,7 +36,7 @@ public class TMSimulator {
             fileScan.nextLine();
             while (fileScan.hasNextLine()) {
                 //Scanner lineScan = new Scanner(fileScan.nextLine());
-                transitions += fileScan.nextLine();
+                transitions += fileScan.nextLine() + " ";
             }
             fileScan.close();
 

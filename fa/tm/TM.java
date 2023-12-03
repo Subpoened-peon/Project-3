@@ -25,6 +25,7 @@ public class TM{
         this.allowedSymbols = allowedSymbols;
         this.numberOfStates = numberOfStates;
         this.tape = inputString;
+        this.turStates = new ArrayList<TMState>();
         for(int i = 0; i < this.numberOfStates; i++) {
             TMState state = new TMState(String.valueOf(i), this.numberOfStates);
             this.turStates.add(state);
@@ -54,15 +55,17 @@ public class TM{
 
             tape.set(index, writeSymbol);
 
-            if(direction == "R") {
+            if(direction.equals("R")) {
                 index++;
                 if(this.visited < index) {
                     this.visited = index;
                 }
-            } else if(direction == "L") {
+            } else if(direction.equals("L")) {
                 if(index == 0) {
                     this.visited++;
-                    tape.add(0, "0");
+                    if(!currState.haltCheck()) {
+                        tape.add(0, "0");
+                    }
                 }
                 else index--;
             }
