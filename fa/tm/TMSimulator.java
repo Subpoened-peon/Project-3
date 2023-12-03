@@ -3,21 +3,26 @@ package fa.tm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class TMSimulator {
 
     public static void main(String[] args) {
         
-        int numStates;
-        int numSymbols;
+        int numStates = 0;
+        int numSymbols = 0;
         String transitions = "";
-        String tape = "";
+        ArrayList<String> tape = new ArrayList<String>();;
 
         //this if statement handles the arguments
         if(args.length == 2) {
-            tape = args[1];
+            String[] strSplit = args[1].split("");
+            tape = new ArrayList<String>(Arrays.asList(strSplit));
         } else if (args.length == 1) {
-            tape = "0000000";
+            for(int i = 0; i <6; i++) {
+                tape.add("0");
+            }
         } else {
             System.out.println("\nERROR: invalid number of arguments");
         }
@@ -41,13 +46,14 @@ public class TMSimulator {
 
         //here we create the Turing machine and run the simulation
         TM sim = new TM(numStates, numSymbols, transitions, tape);
-        tape = sim.runSimulation();
+        sim.runSimulation();
+        String tapeString = sim.tapeToString();
 
         //here we construct the output
-        if(tape.length() > 500) tape = "very large";
+        if(tapeString.length() > 500) tapeString = "very large";
         String output = args[0] + "\n"
-                        + "output: " + tape + "\n"
-                        + "output length: " + tape.length() + "\n"
+                        + "output: " + tapeString + "\n"
+                        + "output length: " + tapeString.length() + "\n"
                         + "sum of symbols: " + sim.getSum();
          
         System.out.println("\n" + output + "\n");

@@ -1,7 +1,7 @@
 package fa.tm;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-import fa.State;
 
 public class TM{
 
@@ -12,6 +12,7 @@ public class TM{
     private int numberOfStates;
     private int sum;
     private String remTransitions;
+    private int visited;
 
 /**
  * Constructor
@@ -38,20 +39,47 @@ public class TM{
     }
 
     public void runSimulation() {
+        int index = 0;
+        this.visited = 0;
+        Scanner scan = new Scanner(this.remTransitions);
 
+        while(!currState.haltCheck() && scan.hasNext()) {
+            String transition = scan.next();
+            String[] transitionParts = transition.split(",");
+            String nextState = transitionParts[0].trim();
+            String writeSymbol = transitionParts[1].trim();
+            String direction = transitionParts[2].trim();
+
+            currState = turStates.get(Integer.parseInt(nextState));
+
+            tape.set(index, writeSymbol);
+
+            if(direction == "R") {
+                index++;
+                if(this.visited < index) {
+                    this.visited = index;
+                }
+            } else if(direction == "L") {
+                if(index == 0) {
+                    this.visited++;
+                    tape.add(0, "0");
+                }
+                else index--;
+            }
+
+
+        }
+
+        scan.close();
     }
 
     public String tapeToString() {
         String tapeString = "";
         this.sum = 0;
-
-        for(int i = 0; i < tape.size(); i++) {
-            if(tape.get(i) != "0") {
-                sum += Integer.parseInt(tape.get(i));
-                tapeString += tape.get(i);
-            }
+        for(int i = 0; i < this.visited; i++) {
+            this.sum += this.sum + Integer.parseInt(tape.get(i));
+            tapeString += tape.get(i);
         }
-
         return tapeString;
     }
 

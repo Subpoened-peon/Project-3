@@ -26,4 +26,5 @@ public class TMState extends State {
         myTransitions.put(symbol, state);
     }
 
+
 }
