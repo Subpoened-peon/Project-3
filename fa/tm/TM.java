@@ -79,8 +79,8 @@ public class TM{
     public String tapeToString() {
         String tapeString = "";
         this.sum = 0;
-        for(int i = 0; i < this.visited; i++) {
-            this.sum += this.sum + Integer.parseInt(tape.get(i));
+        for(int i = 0; i <= this.visited; i++) {
+            this.sum += Integer.parseInt(tape.get(i));
             tapeString += tape.get(i);
         }
         return tapeString;

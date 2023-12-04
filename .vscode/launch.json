@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "fa.tm.TMSimulator",
             "projectName": "Project-3_87d2bdc1",
-            "args": ["fa/tm/file2.txt"]
+            "args": ["fa/tm/file0.txt"]
         }
     ]
 }
