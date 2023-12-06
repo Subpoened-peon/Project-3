@@ -1,16 +1,16 @@
 package fa.tm;
+
 import fa.State;
-import java.util.*;
 
 public class TMState extends State {
     
-    private Map<String, TMState> myTransitions;
+    private String[][] myTransitions;
     private boolean isHalt;
 
-    public TMState(String name, int numberOfStates) {
+    public TMState(String name, int numberOfStates, int numSymbols) {
 
         super(name);
-        this.myTransitions = new HashMap<String, TMState>();
+        this.myTransitions = new String[numSymbols + 1][3];
         if(Integer.parseInt(name) != (numberOfStates - 1)) {
             this.isHalt = false;
         } else {
@@ -18,12 +18,20 @@ public class TMState extends State {
         }
     }
 
+    public void setHalt(boolean halt) {
+        this.isHalt = halt;
+    }
     public boolean haltCheck() {
         return isHalt;
     }
 
-    public void addTransitions(String symbol, TMState state) {
-        myTransitions.put(symbol, state);
+    public void addTransitions(int read, String toState, String write, String move) {
+        myTransitions[read][0] = toState;
+        myTransitions[read][1] = write;
+        myTransitions[read][2] = move;
+    }
+    public String[][] getTransitions() {
+        return myTransitions;
     }
 
 

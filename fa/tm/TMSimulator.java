@@ -20,11 +20,9 @@ public class TMSimulator {
             String[] strSplit = args[1].split("");
             tape = new ArrayList<String>(Arrays.asList(strSplit));
         } else if (args.length == 1) {
-            for(int i = 0; i <6; i++) {
-                tape.add("0");
-            }
+            tape.add("0");
         } else {
-            System.out.println("\nERROR: invalid number of arguments");
+            System.out.println("\n****ERROR: invalid number of arguments****\n");
         }
         
         //this try-catch block scans and stores the data in the file
@@ -48,12 +46,13 @@ public class TMSimulator {
         TM sim = new TM(numStates, numSymbols, transitions, tape);
         sim.runSimulation();
         String tapeString = sim.tapeToString();
+        int tapeLength = tapeString.length();
 
         //here we construct the output
         if(tapeString.length() > 500) tapeString = "very large";
         String output = args[0] + "\n"
                         + "output: " + tapeString + "\n"
-                        + "output length: " + tapeString.length() + "\n"
+                        + "output length: " + tapeLength + "\n"
                         + "sum of symbols: " + sim.getSum();
          
         System.out.println("\n" + output + "\n");

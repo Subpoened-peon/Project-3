@@ -1,5 +1,6 @@
 package fa.tm;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -11,7 +12,6 @@ public class TM{
     private ArrayList<String> tape;
     private int numberOfStates;
     private int sum;
-    private String remTransitions;
     private int visited;
 
 /**
@@ -25,38 +25,63 @@ public class TM{
         this.allowedSymbols = allowedSymbols;
         this.numberOfStates = numberOfStates;
         this.tape = inputString;
+        System.out.println(tape);
+        System.out.println(transitions + "\n");
+        
+        //sets up the states and transitions
         this.turStates = new ArrayList<TMState>();
+        Scanner scan = new Scanner(transitions);
+        scan.useDelimiter(" ");
         for(int i = 0; i < this.numberOfStates; i++) {
-            TMState state = new TMState(String.valueOf(i), this.numberOfStates);
-            this.turStates.add(state);
-        }
-        for(int i = 0; i < (this.numberOfStates - 1); i++) {
-                for(int j = 0; j < this.numberOfStates; j++) {
-                    this.turStates.get(i).addTransitions(String.valueOf(j), turStates.get(j));
+            TMState state = new TMState(String.valueOf(i), this.numberOfStates, this.allowedSymbols);
+            
+            if(i == this.numberOfStates - 1) {
+                state.setHalt(true);
+                turStates.add(state);
+            } else {
+                int j = 0;
+                for(; j <= allowedSymbols; j++) {
+                    
+                    //splitting the transition symbols into individual values
+                    String[] tSplit = scan.next().split(",");
+                    state.addTransitions(j, tSplit[0], tSplit[1], tSplit[2]);
                 }
+                
+                this.turStates.add(state);
+            }
+            
         }
+        scan.close();
+        //for debugging, prints transitions of each state
+        for(int a = 0; a < numberOfStates - 1; a++) {
+            System.out.println("State: " + a);
+            for(int b = 0; b <= allowedSymbols; b++) {
+                System.out.println(Arrays.toString(turStates.get(a).getTransitions()[b]));
+            }
+            System.out.println();
+        }
+        //state 0 is alwyas the start state
         this.currState = turStates.get(0);
-        this.remTransitions = transitions;
     }
 
     public void runSimulation() {
         int index = 0;
         this.visited = 0;
-        Scanner scan = new Scanner(this.remTransitions);
-
-        while(!currState.haltCheck() && scan.hasNext()) {
-            String transition = scan.next();
-            String[] transitionParts = transition.split(",");
-            String nextState = transitionParts[0].trim();
-            String writeSymbol = transitionParts[1].trim();
-            String direction = transitionParts[2].trim();
-
-            currState = turStates.get(Integer.parseInt(nextState));
+        while(!currState.haltCheck()) {
+           
+            int inputSymbol = Integer.parseInt(tape.get(index)); 
+            //This line is essentially grabbing the next state by going into the current state's transition table with respect to the tape input
+            
+            String writeSymbol = currState.getTransitions()[inputSymbol][1];
+            String direction = currState.getTransitions()[inputSymbol][2];
+            TMState nextState = turStates.get(Integer.parseInt(currState.getTransitions()[inputSymbol][0]));
+            currState = nextState;
 
             tape.set(index, writeSymbol);
 
             if(direction.equals("R")) {
                 index++;
+                if(index >= tape.size()) tape.add("0");
                 if(this.visited < index) {
                     this.visited = index;
                 }
@@ -69,11 +94,7 @@ public class TM{
                 }
                 else index--;
             }
-
-
         }
-
-        scan.close();
     }
 
     public String tapeToString() {
