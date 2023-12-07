@@ -3,6 +3,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/*
+ * This file implements the guts of the Turing machine.
+ * It takes a list of instructions and it can execute them.
+ */
 
 public class TM{
 
@@ -69,16 +73,17 @@ public class TM{
         this.visited = 0;
         while(!currState.haltCheck()) {
            
+            //getting the information we need to setup the transition
             int inputSymbol = Integer.parseInt(tape.get(index)); 
-            //This line is essentially grabbing the next state by going into the current state's transition table with respect to the tape input
-            
             String writeSymbol = currState.getTransitions()[inputSymbol][1];
             String direction = currState.getTransitions()[inputSymbol][2];
+            //this is the transition
             TMState nextState = turStates.get(Integer.parseInt(currState.getTransitions()[inputSymbol][0]));
             currState = nextState;
 
             tape.set(index, writeSymbol);
 
+            //these conditions manage the tape and the R/W pointer (which is at 'index')
             if(direction.equals("R")) {
                 index++;
                 if(index >= tape.size()) tape.add("0");
@@ -97,6 +102,7 @@ public class TM{
         }
     }
 
+    //gets the tape and ignores the edge zeroes
     public String tapeToString() {
         String tapeString = "";
         this.sum = 0;
